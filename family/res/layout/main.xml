@@ -43,7 +43,34 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_row" >
-
     </ListView>
+
+    <TableRow
+        android:id="@+id/edit_row"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@android:id/list" >
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:hint="@string/new_name_hint"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textSize="15sp" >
+        </EditText>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:textSize="15sp" >
+        </TextView>
+    </TableRow>
 
 </RelativeLayout>

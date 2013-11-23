@@ -3,12 +3,16 @@ package com.example.family;
 import java.util.ArrayList;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class Main extends ListActivity {
     
@@ -21,13 +25,6 @@ public class Main extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        // a few names to initialize the list for test purposes
-        if (names.size() == 0) {
-            names.add("Bob");
-            names.add("Fred");
-            names.add("Tap To Add A Name");
-        }
-        
         // setup the list adapter
         nameListAdapter = new NameListAdapter(this, names);
         setListAdapter(nameListAdapter);
@@ -38,17 +35,29 @@ public class Main extends ListActivity {
         // handle list actions
         nameListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // get gifter name in selected row
-                String selectedValue = (String)getListAdapter().getItem(position);
-                
-                // When clicked, duplicate a name in the list
-                Main.this.names.add(selectedValue);
-                nameListAdapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), selectedValue, Toast.LENGTH_SHORT).show();
-                
+                // edit/delete?
             }
         });
         
+        // TODO: keyboard covers the name you are typing in if there are several names already.
+        EditText editText = (EditText)findViewById(R.id.edit_name);
+        editText.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // The user just entered a new name, add it to the list
+                    // TODO: Verify name is unique.
+                    String newPerson = v.getText().toString();
+                    Main.this.names.add(newPerson);
+                    nameListAdapter.notifyDataSetChanged();
+                    // clear out the text for the next person
+                    v.setText(null);
+                }
+                
+                // return false so the keyboard will disappear
+                return false;
+            }
+        });
     }
     
     @Override
