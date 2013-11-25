@@ -1,12 +1,16 @@
 package com.example.family;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -40,7 +44,9 @@ public class Main extends ListActivity {
         nameListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                // edit/delete?
+            	
+            	
+                startEditDialog(view);
             }
         });
         
@@ -81,7 +87,17 @@ public class Main extends ListActivity {
         // algorithm from
         // stackoverflow.com/questions/8609644/secret-santa-generating-valid-permutations
         Collections.shuffle(shuffledList);
-        
+        View recipienHeader = findViewById(R.id.recipient_header);
+        if(Family.isPaired()){
+        	Family.setPaired(false);
+        	
+        	recipienHeader.setVisibility(View.GONE);
+        }
+        else{
+        	Family.setPaired(true);
+        	recipienHeader.setVisibility(View.VISIBLE);
+        }
+        recipienHeader.invalidate();
         for (int i = 0; i < shuffledList.size() - 1; i++) {
             // recipient for giver at position 'i' is giver at position 'i+1' in
             // shuffled list.
@@ -108,6 +124,10 @@ public class Main extends ListActivity {
         
     }
     
+    public void onclickChoose(View view){
+    	
+    }
+    
     public void onClickOk(View view){
         EditText nameView = (EditText) findViewById(R.id.edit_name);
         
@@ -121,4 +141,41 @@ public class Main extends ListActivity {
        
     }
     
+    public void onClickDetete(View view){
+    	
+    }
+    
+    private void startEditDialog(View view2){
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		// Get the layout inflater
+		LayoutInflater inflater = getLayoutInflater();
+
+		View view = inflater.inflate(R.layout.edit_dialog, null);
+		final EditText editName = (EditText) view.findViewById(R.id.editNameField);
+	
+
+
+		builder.setView(view);
+		// Add action buttons
+		builder.setPositiveButton(R.string.app_ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						// remove old name and add this one
+						
+						
+					}
+				});
+
+		builder.setNegativeButton(R.string.app_cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		builder.setTitle("Edit Gifter Name: " );
+		builder.create();
+		builder.show();
+    }
 }

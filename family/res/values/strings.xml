@@ -8,5 +8,7 @@
     <string name="new_name_hint">Add A Person</string>
     <string name="pair_button">Pair Everyone!</string>
         <string name="app_ok">Ok</string>
-    
+    <string name="chose_button">Choose</string>
+    <string name="delete_button">Delete</string>
+     <string name="app_cancel">Cancel</string>
 </resources>

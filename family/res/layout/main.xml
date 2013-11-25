@@ -35,6 +35,7 @@
             android:padding="10dp"
             android:text="@string/recipient_header"
             android:layout_marginLeft="10dp"
+            android:visibility="gone"
             android:textSize="20sp" >
         </TextView>
     </TableRow>
@@ -63,6 +64,7 @@
             android:padding="10dp"
              android:layout_weight="1"
             android:textSize="15sp" >
+               <requestFocus />
         </EditText>
 
         <Button
@@ -81,16 +83,29 @@
             android:textSize="15sp" >
         </TextView>
     </TableRow>
-
-    <Button
-        android:id="@+id/pair_button"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_row"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/pair_button"
-        android:onClick="pairPeople" >
-    </Button>
+                android:layout_below="@+id/edit_row"
+                 android:layout_weight="1"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/pair_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:onClick="pairPeople"
+            android:text="@string/pair_button" />
+
+        <Button
+            android:id="@+id/choose_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:onClick="onclickChoose"
+            android:text="@string/chose_button" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

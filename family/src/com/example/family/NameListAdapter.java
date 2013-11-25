@@ -32,7 +32,11 @@ public class NameListAdapter extends ArrayAdapter<String> {
         TextView recipientView = (TextView)rowView.findViewById(R.id.recipient);
         
         nameView.setText(giverList.get(position));
+        
+        if(Family.isPaired()){
+        
         recipientView.setText(recipientList.get(position));
+        }
         
         return rowView;
     }
