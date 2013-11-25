@@ -7,5 +7,6 @@
     <string name="recipient_header">Recipients</string>
     <string name="new_name_hint">Add A Person</string>
     <string name="pair_button">Pair Everyone!</string>
+        <string name="app_ok">Ok</string>
     
 </resources>

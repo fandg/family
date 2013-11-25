@@ -108,4 +108,17 @@ public class Main extends ListActivity {
         
     }
     
+    public void onClickOk(View view){
+        EditText nameView = (EditText) findViewById(R.id.edit_name);
+        
+        
+        Main.this.names.add(nameView.getText().toString());
+        Main.this.recipients.add("none");
+        nameListAdapter.notifyDataSetChanged();
+        nameView.setText("");
+        nameView.setHint(R.string.new_name_hint);
+        // clear out the text for the next person
+       
+    }
+    
 }

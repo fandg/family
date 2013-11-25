@@ -34,6 +34,7 @@
             android:layout_weight="1"
             android:padding="10dp"
             android:text="@string/recipient_header"
+            android:layout_marginLeft="10dp"
             android:textSize="20sp" >
         </TextView>
     </TableRow>
@@ -57,12 +58,20 @@
             android:id="@+id/edit_name"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
             android:hint="@string/new_name_hint"
             android:inputType="textPersonName"
             android:padding="10dp"
+             android:layout_weight="1"
             android:textSize="15sp" >
         </EditText>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickOk"
+
+            android:text="@string/app_ok" />
 
         <TextView
             android:layout_width="fill_parent"
