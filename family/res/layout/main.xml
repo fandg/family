@@ -73,4 +73,15 @@
         </TextView>
     </TableRow>
 
+    <Button
+        android:id="@+id/pair_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_row"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/pair_button"
+        android:onClick="pairPeople" >
+    </Button>
+
 </RelativeLayout>

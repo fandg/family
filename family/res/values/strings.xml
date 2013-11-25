@@ -6,5 +6,6 @@
     <string name="name_header">Gifters</string>
     <string name="recipient_header">Recipients</string>
     <string name="new_name_hint">Add A Person</string>
+    <string name="pair_button">Pair Everyone!</string>
     
 </resources>

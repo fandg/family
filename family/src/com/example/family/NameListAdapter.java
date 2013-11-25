@@ -10,12 +10,16 @@ import android.widget.TextView;
 
 public class NameListAdapter extends ArrayAdapter<String> {
     private final Context           context;
-    private final ArrayList<String> values;
+    private final ArrayList<String> giverList;
+    private final ArrayList<String> recipientList;
     
-    public NameListAdapter(Context context, ArrayList<String> values) {
-        super(context, R.layout.name_list, values);
+    public NameListAdapter(Context context,
+                           ArrayList<String> giverList,
+                           ArrayList<String> recipientList) {
+        super(context, R.layout.name_list, giverList);
         this.context = context;
-        this.values = values;
+        this.giverList = giverList;
+        this.recipientList = recipientList;
     }
     
     @Override
@@ -26,9 +30,9 @@ public class NameListAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.name_list, parent, false);
         TextView nameView = (TextView)rowView.findViewById(R.id.name);
         TextView recipientView = (TextView)rowView.findViewById(R.id.recipient);
-        nameView.setText(values.get(position));
         
-        recipientView.setText("none");
+        nameView.setText(giverList.get(position));
+        recipientView.setText(recipientList.get(position));
         
         return rowView;
     }
