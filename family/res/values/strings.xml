@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">family</string>
+    <string name="app_name">Family</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="name_header">Gifters</string>
+    <string name="recipient_header">Recipients</string>
+    <string name="new_name_hint">Add A Person</string>
+    
 </resources>
