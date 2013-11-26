@@ -43,7 +43,7 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_below="@id/header_row" >
     </ListView>
 
@@ -51,9 +51,9 @@
         android:id="@+id/edit_row"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/pair_choose_row"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@android:id/list" >
+        android:layout_alignParentRight="true" >
 
         <EditText
             android:id="@+id/edit_name"
@@ -85,9 +85,10 @@
     </TableRow>
 
     <TableRow
+        android:id="@+id/pair_choose_row"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_row" >
+        android:layout_above="@+id/reset_hide_row" >
 
         <Button
             android:id="@+id/pair_button"
@@ -104,6 +105,13 @@
             android:layout_weight=".5"
             android:onClick="onclickChoose"
             android:text="@string/chose_button" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/reset_hide_row"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
 
         <Button
             android:id="@+id/reset_button"
@@ -115,11 +123,11 @@
 
         <Button
             android:id="@+id/hide_gifters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-                 android:onClick="onClickHideGifters"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5"
+            android:onClick="onClickHideGifters"
             android:text="@string/hide_button" />
-
     </TableRow>
 
 </RelativeLayout>
