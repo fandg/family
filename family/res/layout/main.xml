@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:background="@color/gray"
         android:layout_below="@android:id/list" >
 
         <EditText
@@ -73,15 +74,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClickOk"
+            
             android:text="@string/add_button" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:textSize="15sp" >
-        </TextView>
+
     </TableRow>
 
     <TableRow
