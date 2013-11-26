@@ -23,19 +23,17 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class Main extends ListActivity {
 
-	ArrayList<String> names = new ArrayList<String>();
-	ArrayList<String> recipients = new ArrayList<String>();
-	ListView nameListView = null;
-	NameListAdapter nameListAdapter = null;
-	private int currentSelection = 0;
-
+	private ListView nameListView = null;
+	private NameListAdapter nameListAdapter = null;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
 		// setup the list adapter
-		nameListAdapter = new NameListAdapter(this, this.names, this.recipients);
+		nameListAdapter = new NameListAdapter(this, Family.getNames(), Family.getRecipients());
 		setListAdapter(nameListAdapter);
 
 		nameListView = getListView();
@@ -45,13 +43,13 @@ public class Main extends ListActivity {
 		nameListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				currentSelection = position;
+				Family.setCurrentSelection(position);
 				startEditDialog(view);
 			}
 		});
 
 		// TODO: keyboard covers the name you are typing in if there are several
-		// names already.
+		// Family.getNames() already.
 		EditText editText = (EditText) findViewById(R.id.edit_name);
 		editText.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -61,8 +59,8 @@ public class Main extends ListActivity {
 					// The user just entered a new name, add it to the list
 					String newPerson = v.getText().toString();
 					if (Main.this.isNameValid(newPerson) == true) {
-						Main.this.names.add(newPerson);
-						Main.this.recipients.add("none");
+						Family.getNames().add(newPerson);
+						Family.getRecipients().add("none");
 						nameListAdapter.notifyDataSetChanged();
 						// clear out the text for the next person
 						v.setText(null);
@@ -85,7 +83,7 @@ public class Main extends ListActivity {
 
 	/** Called when the user clicks the Pair Everyone button */
 	public void pairPeople(View view) {
-		List<String> shuffledList = new ArrayList<String>(this.names);
+		List<String> shuffledList = new ArrayList<String>(Family.getNames());
 		// algorithm from
 		// stackoverflow.com/questions/8609644/secret-santa-generating-valid-permutations
 		Collections.shuffle(shuffledList);
@@ -104,20 +102,20 @@ public class Main extends ListActivity {
 			// shuffled list.
 
 			// find giver 'i'
-			for (int j = 0; j < this.names.size(); j++) {
-				if (this.names.get(j).equals(shuffledList.get(i)) == true) {
+			for (int j = 0; j < Family.getNames().size(); j++) {
+				if (Family.getNames().get(j).equals(shuffledList.get(i)) == true) {
 					// set the recipient to next giver in the shuffled list
-					this.recipients.set(j, shuffledList.get(i + 1));
+					Family.getRecipients().set(j, shuffledList.get(i + 1));
 					break;
 				}
 			}
 		}
 		// recipient for giver at the end of the shuffled list is the first
 		// giver in the shuffled list
-		for (int j = 0; j < this.names.size(); j++) {
-			if (this.names.get(j).equals(
+		for (int j = 0; j < Family.getNames().size(); j++) {
+			if (Family.getNames().get(j).equals(
 					shuffledList.get(shuffledList.size() - 1)) == true) {
-				this.recipients.set(j, shuffledList.get(0));
+				Family.getRecipients().set(j, shuffledList.get(0));
 				break;
 			}
 		}
@@ -128,15 +126,15 @@ public class Main extends ListActivity {
 	public void onclickChoose(View view) {
 		String chosenName ="";
 		 final int randomInt;
-		if(names.size() > 1){
+		if(Family.getNames().size() > 1){
 		
 			Random randomGenerator = new Random();
-			randomInt = randomGenerator.nextInt(names.size() - 1);
+			randomInt = randomGenerator.nextInt(Family.getNames().size() - 1);
 
-			chosenName = names.get(randomInt);
+			chosenName = Family.getNames().get(randomInt);
 		}
 		else{
-			 chosenName = names.get(0);
+			 chosenName = Family.getNames().get(0);
 			 randomInt = 0;
 		}
 
@@ -154,7 +152,7 @@ public class Main extends ListActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 
-						names.remove(randomInt);
+						Family.getNames().remove(randomInt);
 						nameListAdapter.notifyDataSetChanged();
 						
 					}
@@ -175,8 +173,8 @@ public class Main extends ListActivity {
 		String newName = nameView.getText().toString();
 
 		if (this.isNameValid(newName) == true) {
-			Main.this.names.add(nameView.getText().toString());
-			Main.this.recipients.add(getResources().getString(R.string.none));
+			Family.getNames().add(nameView.getText().toString());
+			Family.getRecipients().add(getResources().getString(R.string.none));
 			nameListAdapter.notifyDataSetChanged();
 			// clear out the text for the next person
 			nameView.setText("");
@@ -210,7 +208,7 @@ public class Main extends ListActivity {
 		View view = inflater.inflate(R.layout.edit_dialog, null);
 		final EditText editName = (EditText) view
 				.findViewById(R.id.editNameField);
-		editName.setText(names.get(currentSelection));
+		editName.setText(Family.getNames().get(Family.getCurrentSelection()));
 		final TextView gifterName = (TextView) view2.findViewById(R.id.name);
 		editName.setText(gifterName.getText());
 
@@ -275,16 +273,16 @@ public class Main extends ListActivity {
 	private void changeName(String oldName, String newName) {
 		if (this.isNameValid(newName) == true) {
 			// Change the name in the gifter's list
-			for (int i = 0; i < this.names.size(); i++) {
-				if (this.names.get(i).equals(oldName) == true) {
-					this.names.set(i, newName);
+			for (int i = 0; i < Family.getNames().size(); i++) {
+				if (Family.getNames().get(i).equals(oldName) == true) {
+					Family.getNames().set(i, newName);
 					break;
 				}
 			}
 			// Change the name in the recipient list
-			for (int i = 0; i < this.recipients.size(); i++) {
-				if (this.recipients.get(i).equals(oldName) == true) {
-					this.recipients.set(i, newName);
+			for (int i = 0; i < Family.getRecipients().size(); i++) {
+				if (Family.getRecipients().get(i).equals(oldName) == true) {
+					Family.getRecipients().set(i, newName);
 					break;
 				}
 			}
@@ -293,19 +291,22 @@ public class Main extends ListActivity {
 	}
 
 	private void clearRecipients() {
-		for (int i = 0; i < this.recipients.size(); i++) {
-			this.recipients.set(i, getResources().getString(R.string.none));
+		for (int i = 0; i < Family.getRecipients().size(); i++) {
+			Family.getRecipients().set(i, getResources().getString(R.string.none));
 		}
-		nameListAdapter.notifyDataSetChanged();
+		
+//		nameListAdapter.notifyDataSetChanged();
+		pairPeople(null);
+		
 	}
 
 	private void deleteGifter(String gifterName) {
 
 		boolean gifterDeleted = false;
 
-		for (int i = 0; i < this.names.size(); i++) {
-			if (this.names.get(i).equals(gifterName) == true) {
-				this.names.remove(i);
+		for (int i = 0; i < Family.getNames().size(); i++) {
+			if (Family.getNames().get(i).equals(gifterName) == true) {
+				Family.getNames().remove(i);
 				gifterDeleted = true;
 				break;
 			}
@@ -325,7 +326,7 @@ public class Main extends ListActivity {
 			isNameValid = false;
 		} else {
 			// verify name is unique
-			for (String gifter : this.names) {
+			for (String gifter : Family.getNames()) {
 				if (gifter.equals(newName) == true) {
 					isNameValid = false;
 					break;
