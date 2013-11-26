@@ -44,6 +44,7 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@+id/edit_row"
         android:layout_below="@id/header_row" >
     </ListView>
 
