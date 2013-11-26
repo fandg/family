@@ -129,16 +129,10 @@ public class Main extends ListActivity {
     public void onclickChoose(View view) {
         String chosenName = "";
         final int randomInt;
-        if (Family.getNames().size() > 1) {
-            
-            Random randomGenerator = new Random();
-            randomInt = randomGenerator.nextInt(Family.getNames().size() - 1);
-            
-            chosenName = Family.getNames().get(randomInt);
-        } else {
-            chosenName = Family.getNames().get(0);
-            randomInt = 0;
-        }
+        Random randomGenerator = new Random();
+        randomInt = randomGenerator.nextInt(Family.getNames().size());
+        
+        chosenName = Family.getNames().get(randomInt);
         
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
