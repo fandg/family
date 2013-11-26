@@ -160,6 +160,8 @@ public class Main extends ListActivity {
         final EditText editName = (EditText) view
                 .findViewById(R.id.editNameField);
         final TextView gifterName = (TextView) view2.findViewById(R.id.name);
+        editName.setText(gifterName.getText());
+        
         builder.setView(view);
         // Add action buttons
         builder.setPositiveButton(R.string.app_change_name,
@@ -185,7 +187,32 @@ public class Main extends ListActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        
+                        // TODO: This is a total hack to get it implemented
+                        // quickly.
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                Main.this);
+                        builder.setMessage(R.string.delete_confirm_title)
+                                .setPositiveButton(R.string.app_ok,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                String gifter = gifterName
+                                                        .getText().toString();
+                                                Main.this.deleteGifter(gifter);
+                                            }
+                                        })
+                                .setNegativeButton(R.string.app_cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                        builder.create();
+                        builder.show();
                     }
                 });
         builder.setTitle("Edit Gifter Name: ");
@@ -218,6 +245,24 @@ public class Main extends ListActivity {
             this.recipients.set(i, getResources().getString(R.string.none));
         }
         nameListAdapter.notifyDataSetChanged();
+    }
+    
+    private void deleteGifter(String gifterName) {
+        
+        boolean gifterDeleted = false;
+        
+        for (int i = 0; i < this.names.size(); i++) {
+            if (this.names.get(i).equals(gifterName) == true) {
+                this.names.remove(i);
+                gifterDeleted = true;
+                break;
+            }
+        }
+        
+        if (gifterDeleted == true) {
+            this.clearRecipients();
+            nameListAdapter.notifyDataSetChanged();
+        }
     }
     
     private boolean isNameValid(String newName) {
