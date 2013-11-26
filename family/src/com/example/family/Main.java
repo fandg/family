@@ -26,6 +26,7 @@ public class Main extends ListActivity {
     ArrayList<String> recipients      = new ArrayList<String>();
     ListView          nameListView    = null;
     NameListAdapter   nameListAdapter = null;
+    private int currentSelection = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class Main extends ListActivity {
         nameListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                
+                currentSelection = position;
                 startEditDialog(view);
             }
         });
@@ -151,14 +152,25 @@ public class Main extends ListActivity {
         
     }
     
+    public void onClickHideGifters(View view){
+    	if(Family.isHideGifters()){
+    		Family.setHideGifters(false);
+    	}
+    	else{
+    		Family.setHideGifters(true);
+    	}
+    	 nameListAdapter.notifyDataSetChanged();
+    }
+    
+    
     private void startEditDialog(View view2) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
         LayoutInflater inflater = getLayoutInflater();
         
         View view = inflater.inflate(R.layout.edit_dialog, null);
-        final EditText editName = (EditText) view
-                .findViewById(R.id.editNameField);
+        final EditText editName = (EditText) view .findViewById(R.id.editNameField);
+        editName.setText(names.get(currentSelection));
         final TextView gifterName = (TextView) view2.findViewById(R.id.name);
         builder.setView(view);
         // Add action buttons
@@ -185,6 +197,10 @@ public class Main extends ListActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                    	names.remove(currentSelection);
+                    	nameListAdapter.notifyDataSetChanged();
+                    	
+                    	
                         dialog.cancel();
                     }
                 });
