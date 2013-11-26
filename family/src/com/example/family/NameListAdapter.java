@@ -36,12 +36,12 @@ public class NameListAdapter extends ArrayAdapter<String> {
         
         if(Family.isHideGifters()){
         try{
-        	Random randomGenerator = new Random();
+//        	Random randomGenerator = new Random();
             String name =   giverList.get(position);
             
             
-            int randomInt = randomGenerator.nextInt(name.length() - 1);
-            char letter = name.charAt(randomInt);
+//            int randomInt = randomGenerator.nextInt(name.length() - 1);
+//            char letter = name.charAt(randomInt);
             
             String newString = "";
             for(int i = 0; i < name.length(); i ++){
