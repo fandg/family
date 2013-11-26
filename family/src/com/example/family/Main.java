@@ -94,7 +94,7 @@ public class Main extends ListActivity {
         if (Family.isPaired()) {
             Family.setPaired(false);
             
-            recipienHeader.setVisibility(View.GONE);
+            recipienHeader.setVisibility(View.INVISIBLE);
         } else {
             Family.setPaired(true);
             recipienHeader.setVisibility(View.VISIBLE);
