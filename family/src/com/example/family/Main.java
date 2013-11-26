@@ -1,6 +1,5 @@
 package com.example.family;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,8 +43,7 @@ public class Main extends ListActivity {
         nameListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-            	
-            	
+                
                 startEditDialog(view);
             }
         });
@@ -59,19 +57,21 @@ public class Main extends ListActivity {
                     KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // The user just entered a new name, add it to the list
-                    // TODO: Verify name is unique.
                     String newPerson = v.getText().toString();
-                    Main.this.names.add(newPerson);
-                    Main.this.recipients.add("none");
-                    nameListAdapter.notifyDataSetChanged();
-                    // clear out the text for the next person
-                    v.setText(null);
+                    if (Main.this.isNameValid(newPerson) == true) {
+                        Main.this.names.add(newPerson);
+                        Main.this.recipients.add("none");
+                        nameListAdapter.notifyDataSetChanged();
+                        // clear out the text for the next person
+                        v.setText(null);
+                    }
                 }
                 
                 // return false so the keyboard will disappear
                 return false;
             }
         });
+        editText.setVisibility(View.VISIBLE);
     }
     
     @Override
@@ -88,14 +88,13 @@ public class Main extends ListActivity {
         // stackoverflow.com/questions/8609644/secret-santa-generating-valid-permutations
         Collections.shuffle(shuffledList);
         View recipienHeader = findViewById(R.id.recipient_header);
-        if(Family.isPaired()){
-        	Family.setPaired(false);
-        	
-        	recipienHeader.setVisibility(View.GONE);
-        }
-        else{
-        	Family.setPaired(true);
-        	recipienHeader.setVisibility(View.VISIBLE);
+        if (Family.isPaired()) {
+            Family.setPaired(false);
+            
+            recipienHeader.setVisibility(View.GONE);
+        } else {
+            Family.setPaired(true);
+            recipienHeader.setVisibility(View.VISIBLE);
         }
         recipienHeader.invalidate();
         for (int i = 0; i < shuffledList.size() - 1; i++) {
@@ -124,58 +123,118 @@ public class Main extends ListActivity {
         
     }
     
-    public void onclickChoose(View view){
-    	
+    public void onclickChoose(View view) {
+        
     }
     
-    public void onClickOk(View view){
+    public void onClickOk(View view) {
         EditText nameView = (EditText) findViewById(R.id.edit_name);
         
+        String newName = nameView.getText().toString();
         
-        Main.this.names.add(nameView.getText().toString());
-        Main.this.recipients.add("none");
+        if (this.isNameValid(newName) == true) {
+            Main.this.names.add(nameView.getText().toString());
+            Main.this.recipients.add(getResources().getString(R.string.none));
+            nameListAdapter.notifyDataSetChanged();
+            // clear out the text for the next person
+            nameView.setText("");
+            nameView.setHint(R.string.new_name_hint);
+        }
+        
+    }
+    
+    public void onClickReset(View view) {
+        this.clearRecipients();
+    }
+    
+    public void onClickDetete(View view) {
+        
+    }
+    
+    private void startEditDialog(View view2) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+        
+        View view = inflater.inflate(R.layout.edit_dialog, null);
+        final EditText editName = (EditText) view
+                .findViewById(R.id.editNameField);
+        final TextView gifterName = (TextView) view2.findViewById(R.id.name);
+        builder.setView(view);
+        // Add action buttons
+        builder.setPositiveButton(R.string.app_change_name,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // remove old name and add this one
+                        String oldName = gifterName.getText().toString();
+                        String newName = editName.getText().toString();
+                        Main.this.changeName(oldName, newName);
+                        
+                    }
+                });
+        
+        builder.setNegativeButton(R.string.app_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.setNeutralButton(R.string.app_delete,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.setTitle("Edit Gifter Name: ");
+        builder.create();
+        builder.show();
+    }
+    
+    private void changeName(String oldName, String newName) {
+        if (this.isNameValid(newName) == true) {
+            // Change the name in the gifter's list
+            for (int i = 0; i < this.names.size(); i++) {
+                if (this.names.get(i).equals(oldName) == true) {
+                    this.names.set(i, newName);
+                    break;
+                }
+            }
+            // Change the name in the recipient list
+            for (int i = 0; i < this.recipients.size(); i++) {
+                if (this.recipients.get(i).equals(oldName) == true) {
+                    this.recipients.set(i, newName);
+                    break;
+                }
+            }
+            nameListAdapter.notifyDataSetChanged();
+        }
+    }
+    
+    private void clearRecipients() {
+        for (int i = 0; i < this.recipients.size(); i++) {
+            this.recipients.set(i, getResources().getString(R.string.none));
+        }
         nameListAdapter.notifyDataSetChanged();
-        nameView.setText("");
-        nameView.setHint(R.string.new_name_hint);
-        // clear out the text for the next person
-       
     }
     
-    public void onClickDetete(View view){
-    	
-    }
-    
-    private void startEditDialog(View view2){
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// Get the layout inflater
-		LayoutInflater inflater = getLayoutInflater();
-
-		View view = inflater.inflate(R.layout.edit_dialog, null);
-		final EditText editName = (EditText) view.findViewById(R.id.editNameField);
-	
-
-
-		builder.setView(view);
-		// Add action buttons
-		builder.setPositiveButton(R.string.app_ok,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						// remove old name and add this one
-						
-						
-					}
-				});
-
-		builder.setNegativeButton(R.string.app_cancel,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
-		builder.setTitle("Edit Gifter Name: " );
-		builder.create();
-		builder.show();
+    private boolean isNameValid(String newName) {
+        boolean isNameValid = true;
+        if (newName == null) {
+            isNameValid = false;
+        } else if (newName.trim().equals("") == true) {
+            isNameValid = false;
+        } else {
+            // verify name is unique
+            for (String gifter : this.names) {
+                if (gifter.equals(newName) == true) {
+                    isNameValid = false;
+                    break;
+                }
+            }
+        }
+        return isNameValid;
     }
 }

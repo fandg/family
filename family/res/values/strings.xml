@@ -7,8 +7,14 @@
     <string name="recipient_header">Recipients</string>
     <string name="new_name_hint">Add A Person</string>
     <string name="pair_button">Pair Everyone!</string>
-        <string name="app_ok">Ok</string>
+    <string name="app_ok">OK</string>
     <string name="chose_button">Choose</string>
     <string name="delete_button">Delete</string>
-     <string name="app_cancel">Cancel</string>
+    <string name="app_cancel">Cancel</string>
+    <string name="app_delete">Delete Gifter</string>
+    <string name="app_change_name">Change Name</string>
+    <string name="add_button">Add</string>
+    <string name="reset_button">Reset</string>
+    <string name="none">None</string>
+
 </resources>

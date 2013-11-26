@@ -31,12 +31,12 @@
             android:id="@+id/recipient_header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:padding="10dp"
             android:text="@string/recipient_header"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone"
-            android:textSize="20sp" >
+            android:textSize="20sp"
+            android:visibility="gone" >
         </TextView>
     </TableRow>
 
@@ -59,12 +59,13 @@
             android:id="@+id/edit_name"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_weight="1"
             android:hint="@string/new_name_hint"
             android:inputType="textPersonName"
             android:padding="10dp"
-             android:layout_weight="1"
             android:textSize="15sp" >
-               <requestFocus />
+
+            <requestFocus />
         </EditText>
 
         <Button
@@ -72,8 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClickOk"
-
-            android:text="@string/app_ok" />
+            android:text="@string/add_button" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -83,16 +83,16 @@
             android:textSize="15sp" >
         </TextView>
     </TableRow>
-    <LinearLayout
+
+    <TableRow
         android:layout_width="fill_parent"
-                android:layout_below="@+id/edit_row"
-                 android:layout_weight="1"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_row" >
 
         <Button
             android:id="@+id/pair_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight=".5"
             android:onClick="pairPeople"
             android:text="@string/pair_button" />
@@ -100,12 +100,18 @@
         <Button
             android:id="@+id/choose_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight=".5"
             android:onClick="onclickChoose"
             android:text="@string/chose_button" />
 
-    </LinearLayout>
-
+        <Button
+            android:id="@+id/reset_button"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5"
+            android:onClick="onClickReset"
+            android:text="@string/reset_button" />
+    </TableRow>
 
 </RelativeLayout>
