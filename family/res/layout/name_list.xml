@@ -8,11 +8,11 @@
         android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginRight="5dp"
         android:layout_weight="1"
-        android:padding="5dp"
-        android:background="@color/blue"
         android:alpha="0.75"
-        android:layout_marginRight="10dp"
+        android:background="@color/green"
+        android:padding="3dp"
         android:textSize="15sp" >
     </TextView>
 
@@ -20,13 +20,12 @@
         android:id="@+id/recipient"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginLeft="5dp"
         android:layout_weight="1"
         android:alpha="0.5"
-        android:background="@color/blue"
-        android:gravity="right"
-        android:padding="5dp"
+        android:background="@color/green"
+        android:padding="3dp"
         android:textSize="15sp" >
-
     </TextView>
 
 </LinearLayout>

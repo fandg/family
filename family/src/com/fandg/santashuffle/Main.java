@@ -90,16 +90,11 @@ public class Main extends ListActivity {
         // algorithm from
         // stackoverflow.com/questions/8609644/secret-santa-generating-valid-permutations
         Collections.shuffle(shuffledList);
-        View recipienHeader = findViewById(R.id.recipient_header);
         if (Family.isPaired()) {
             Family.setPaired(false);
-            
-            recipienHeader.setVisibility(View.INVISIBLE);
         } else {
             Family.setPaired(true);
-            recipienHeader.setVisibility(View.VISIBLE);
         }
-        recipienHeader.invalidate();
         for (int i = 0; i < shuffledList.size() - 1; i++) {
             // recipient for giver at position 'i' is giver at position 'i+1' in
             // shuffled list.
@@ -296,9 +291,8 @@ public class Main extends ListActivity {
             Family.getRecipients().set(i,
                     getResources().getString(R.string.none));
         }
-        
-        // nameListAdapter.notifyDataSetChanged();
-        pairPeople(null);
+        Family.setPaired(false);
+        nameListAdapter.notifyDataSetChanged();
         
     }
     
