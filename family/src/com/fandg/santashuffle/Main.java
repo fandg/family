@@ -5,10 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,8 +28,9 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class Main extends ListActivity {
     
-    private ListView        nameListView    = null;
-    private NameListAdapter nameListAdapter = null;
+    private static final int PICK_CONTACT    = 42;
+    private ListView         nameListView    = null;
+    private NameListAdapter  nameListAdapter = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -330,5 +336,51 @@ public class Main extends ListActivity {
             }
         }
         return isNameValid;
+    }
+    
+    public void requestContact(View v) {
+        try {
+            // creates the contact list
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    ContactsContract.Contacts.CONTENT_URI);
+            // intent.setType(ContactsContract.Contacts.DISPLAY_NAME);
+            startActivityForResult(intent, PICK_CONTACT);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        
+        switch (reqCode) {
+        case (PICK_CONTACT):
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData(); // has the uri for picked
+                                                  // contact
+                String[] display = { ContactsContract.Contacts.DISPLAY_NAME };
+                Cursor c = getContentResolver().query(contactData, display,
+                        null, null, null); // creates the contact cursor with
+                                           // the
+                                           // returned uri
+                if (c.moveToFirst()) {
+                    String name = c
+                            .getString(c
+                                    .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    if (this.isNameValid(name) == true) {
+                        Family.getNames().add(name);
+                        Family.getRecipients().add("none");
+                        nameListAdapter.notifyDataSetChanged();
+                        Family.setCurrentSelection(Family.getNames().size());
+                        nameListView.smoothScrollToPosition(Family.getNames()
+                                .size());
+                        
+                    }
+                }
+            }
+            break;
+        }
+        
     }
 }

@@ -19,5 +19,6 @@
     <string name="chosen_title">Chosen Name: </string>
     <string name="none">None</string>
     <string name="delete_confirm_title">Are you sure you want to delete this person?</string>
+    <string name="select_contact_button_name">Select Contact</string>
 
 </resources>
