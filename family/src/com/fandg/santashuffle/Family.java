@@ -1,4 +1,4 @@
-package com.example.family;
+package com.fandg.santashuffle;
 import java.util.ArrayList;
 
 import android.app.Application;
