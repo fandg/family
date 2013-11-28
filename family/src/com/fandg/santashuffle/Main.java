@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 public class Main extends ListActivity {
     
@@ -127,12 +129,43 @@ public class Main extends ListActivity {
         
     }
     
+    private boolean verify(){
+    	
+    	for(int i = 0; i < Family.getNames().size(); i++){
+    		if(!Family.getChosenIndicies().contains(i)){
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
+    
     public void onclickChoose(View view) {
         String chosenName = "";
         final int randomInt;
         Random randomGenerator = new Random();
-        randomInt = randomGenerator.nextInt(Family.getNames().size());
+        int index = -1;
+        boolean newValFound = true;
+        while(verify() && newValFound){
         
+        	index = randomGenerator.nextInt(Family.getNames().size());
+        	if(!Family.getChosenIndicies().contains(index)){
+        	 break;
+        	}
+     
+        
+        }
+        if(index == -1){
+    		int duration = Toast.LENGTH_SHORT;
+
+    		Toast toast = Toast.makeText(this, "No Names left to choose", duration *2);
+    		toast.setGravity(Gravity.TOP, 0, 50);
+    		toast.show();
+        	
+        	return;
+        }
+        randomInt = index;
         chosenName = Family.getNames().get(randomInt);
         
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -146,22 +179,31 @@ public class Main extends ListActivity {
         
         builder.setTitle("Chosen Name From List ");
         builder.setView(choseView);
-        builder.setPositiveButton(R.string.app_ok,
+        builder.setPositiveButton("Choose and mark",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         
-                        Family.getNames().remove(randomInt);
+                        processChoose(randomInt);
                         nameListAdapter.notifyDataSetChanged();
                         
                     }
                 });
+        builder.setNeutralButton("Choose and delete", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+                Family.getNames().remove(randomInt);
+                nameListAdapter.notifyDataSetChanged();
+			}
+		});
         builder.setNegativeButton(R.string.app_cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
                 });
+        
         builder.create();
         builder.show();
         
@@ -185,14 +227,16 @@ public class Main extends ListActivity {
         
     }
     
+    private void processChoose(int index){
+    	Family.getChosenIndicies().add(index);
+    }
+    
+    
     public void onClickReset(View view) {
         this.clearRecipients();
-    }
-    
-    public void onClickDetete(View view) {
         
     }
-    
+     
     public void onClickHideGifters(View view) {
         if (Family.isHideGifters()) {
             Family.setHideGifters(false);
@@ -293,10 +337,12 @@ public class Main extends ListActivity {
     }
     
     private void clearRecipients() {
+    	
+    	
         for (int i = 0; i < Family.getRecipients().size(); i++) {
-            Family.getRecipients().set(i,
-                    getResources().getString(R.string.none));
+            Family.getRecipients().set(i, getResources().getString(R.string.none));
         }
+        Family.getChosenIndicies().clear();
         Family.setPaired(false);
         nameListAdapter.notifyDataSetChanged();
         
