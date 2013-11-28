@@ -3,6 +3,7 @@ package com.fandg.santashuffle;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,15 +52,27 @@ public class NameListAdapter extends ArrayAdapter<String> {
                     newString += "-";
                     // }
                 }
-                
-                nameView.setText(newString);
+                if(Family.getChosenIndicies().contains(position)){
+                	nameView.setText(newString + " (CHOSEN)");
+                	nameView.setTextColor(Color.RED);
+                }
+                else{
+                	 nameView.setText(newString);
+                }
+            
             } catch (IllegalArgumentException ex) {
                 Log.d(this.getClass().getSimpleName(), ex.getMessage());
                 
             }
         } else {
-            
-            nameView.setText(giverList.get(position));
+            if(Family.getChosenIndicies().contains(position)){
+            	nameView.setText(giverList.get(position) + " (CHOSEN)");
+            	nameView.setTextColor(Color.RED);
+            }
+            else{
+            	nameView.setText(giverList.get(position));
+            }
+
         }
         
         if (Family.isPaired()) {
