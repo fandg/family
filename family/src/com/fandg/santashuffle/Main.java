@@ -11,6 +11,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -19,11 +20,13 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -83,6 +86,41 @@ public class Main extends ListActivity {
             }
         });
         editText.setVisibility(View.VISIBLE);
+        
+        // Hide the bottom two rows of buttons when the softkeyboard is visible
+        // so the name list doesn't shrink to nothing
+        final View activityRootView = findViewById(R.id.activityRoot);
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        
+                        Rect r = new Rect();
+                        // r will be populated with the coordinates of your view
+                        // that area still visible.
+                        activityRootView.getWindowVisibleDisplayFrame(r);
+                        
+                        int heightDiff = activityRootView.getRootView()
+                                .getHeight() - (r.bottom - r.top);
+                        
+                        TableRow pairChooseRow = (TableRow) findViewById(R.id.pair_choose_row);
+                        TableRow resetHideRow = (TableRow) findViewById(R.id.reset_hide_row);
+                        
+                        // if more than 100 pixels, its probably a keyboard...
+                        if (heightDiff > 100) {
+                            // With a keyboard
+                            pairChooseRow.setVisibility(View.GONE);
+                            resetHideRow.setVisibility(View.GONE);
+                            
+                        } else {
+                            // Without a keyboard
+                            pairChooseRow.setVisibility(View.VISIBLE);
+                            resetHideRow.setVisibility(View.VISIBLE);
+                            
+                        }
+                    }
+                });
+        
     }
     
     @Override
@@ -129,17 +167,16 @@ public class Main extends ListActivity {
         
     }
     
-    private boolean verify(){
-    	
-    	for(int i = 0; i < Family.getNames().size(); i++){
-    		if(!Family.getChosenIndicies().contains(i)){
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+    private boolean verify() {
+        
+        for (int i = 0; i < Family.getNames().size(); i++) {
+            if (!Family.getChosenIndicies().contains(i)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
-    
     
     public void onclickChoose(View view) {
         String chosenName = "";
@@ -147,23 +184,23 @@ public class Main extends ListActivity {
         Random randomGenerator = new Random();
         int index = -1;
         boolean newValFound = true;
-        while(verify() && newValFound){
-        
-        	index = randomGenerator.nextInt(Family.getNames().size());
-        	if(!Family.getChosenIndicies().contains(index)){
-        	 break;
-        	}
-     
-        
+        while (verify() && newValFound) {
+            
+            index = randomGenerator.nextInt(Family.getNames().size());
+            if (!Family.getChosenIndicies().contains(index)) {
+                break;
+            }
+            
         }
-        if(index == -1){
-    		int duration = Toast.LENGTH_SHORT;
-
-    		Toast toast = Toast.makeText(this, "No Names left to choose", duration *2);
-    		toast.setGravity(Gravity.TOP, 0, 50);
-    		toast.show();
-        	
-        	return;
+        if (index == -1) {
+            int duration = Toast.LENGTH_SHORT;
+            
+            Toast toast = Toast.makeText(this, "No Names left to choose",
+                    duration * 2);
+            toast.setGravity(Gravity.TOP, 0, 50);
+            toast.show();
+            
+            return;
         }
         randomInt = index;
         chosenName = Family.getNames().get(randomInt);
@@ -189,14 +226,15 @@ public class Main extends ListActivity {
                         
                     }
                 });
-        builder.setNeutralButton("Choose and delete", new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-                Family.getNames().remove(randomInt);
-                nameListAdapter.notifyDataSetChanged();
-			}
-		});
+        builder.setNeutralButton("Choose and delete",
+                new DialogInterface.OnClickListener() {
+                    
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Family.getNames().remove(randomInt);
+                        nameListAdapter.notifyDataSetChanged();
+                    }
+                });
         builder.setNegativeButton(R.string.app_cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -227,16 +265,15 @@ public class Main extends ListActivity {
         
     }
     
-    private void processChoose(int index){
-    	Family.getChosenIndicies().add(index);
+    private void processChoose(int index) {
+        Family.getChosenIndicies().add(index);
     }
-    
     
     public void onClickReset(View view) {
         this.clearRecipients();
         
     }
-     
+    
     public void onClickHideGifters(View view) {
         if (Family.isHideGifters()) {
             Family.setHideGifters(false);
@@ -337,10 +374,10 @@ public class Main extends ListActivity {
     }
     
     private void clearRecipients() {
-    	
-    	
+        
         for (int i = 0; i < Family.getRecipients().size(); i++) {
-            Family.getRecipients().set(i, getResources().getString(R.string.none));
+            Family.getRecipients().set(i,
+                    getResources().getString(R.string.none));
         }
         Family.getChosenIndicies().clear();
         Family.setPaired(false);
