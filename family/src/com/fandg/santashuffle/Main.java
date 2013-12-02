@@ -31,6 +31,10 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+/**
+ * Main activity!
+ *
+ */
 public class Main extends ListActivity {
     
     private static final int PICK_CONTACT    = 42;

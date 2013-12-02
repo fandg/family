@@ -9,14 +9,7 @@ import android.view.View.OnTouchListener;
 import android.widget.TextView;
 
 /**
- * 
- * Activity for the splash screen.
- * 
- * This activity has not history - after it it finishes it is destroyed and will
- * only be created again after a crash or initial start
- * 
- * For this class to work you will need the supporting layout.xml or create your
- * own.
+ * splash screen
  * 
  * @author Arden
  * 
