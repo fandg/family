@@ -37,6 +37,10 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+/**
+ * Main activity!
+ * 
+ */
 public class Main extends ListActivity {
     
     private static final int PICK_CONTACT    = 42;
