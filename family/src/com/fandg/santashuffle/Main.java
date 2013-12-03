@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,11 +32,17 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 public class Main extends ListActivity {
     
     private static final int PICK_CONTACT    = 42;
     private ListView         nameListView    = null;
     private NameListAdapter  nameListAdapter = null;
+    private AdView           adView          = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +127,23 @@ public class Main extends ListActivity {
                         }
                     }
                 });
+        Log.d("test", "checking google play services");
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+            Log.d("test", "we got play services");
+            System.out.println("we got play services");
+        } else {
+            Log.d("test", "uh oh, no play services");
+            System.out.println("uh oh, no play services");
+        }
+        Log.d("test", "done checking google play services");
+        
+        // Initiate a generic request.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        
+        this.adView = (AdView) findViewById(R.id.adView);
+        
+        // Load the adView with the ad request.
+        this.adView.loadAd(adRequest);
         
     }
     
@@ -466,4 +490,23 @@ public class Main extends ListActivity {
         }
         
     }
+    
+    @Override
+    public void onPause() {
+        this.adView.pause();
+        super.onPause();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.adView.resume();
+    }
+    
+    @Override
+    public void onDestroy() {
+        this.adView.destroy();
+        super.onDestroy();
+    }
+    
 }

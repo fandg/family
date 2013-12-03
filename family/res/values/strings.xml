@@ -23,5 +23,6 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="ad_unit_id">ca-app-pub-5797036756387487/1728241651</string>
 
 </resources>
