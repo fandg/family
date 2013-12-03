@@ -53,6 +53,35 @@ public class Main extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        // Setup the banner ad
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
+            Log.d("test", "uh oh, no play services");
+            // Not sure the best way to handle this. The following dialog didn't
+            // seem to do anything.
+            GooglePlayServicesUtil.getErrorDialog(
+                    GooglePlayServicesUtil.isGooglePlayServicesAvailable(this),
+                    this, 43);
+        } else {
+            Log.d("test", "we got play services");
+        }
+        
+        // Initiate a generic ad request.
+        
+        // XXX: This is the production ad request. Uncomment this line for all
+        // submissions to the play store.
+        AdRequest adRequest = new AdRequest.Builder().build();
+        // XXX: Dan's Infuse test ad builder. Leave this here for testing.
+        // AdRequest adRequest = new AdRequest.Builder().addTestDevice(
+        // "096E6F3C7FF285DF1A11D96519DB5CF1").build();
+        // XXX: Dan's S4 test ad builder. Leave this here for testing.
+        // AdRequest adRequest = new AdRequest.Builder().addTestDevice(
+        // "AF2E1D29685A5C2961BCD01C4F4E71A7").build();
+        
+        this.adView = (AdView) findViewById(R.id.adView);
+        
+        // Load the adView with the ad request.
+        this.adView.loadAd(adRequest);
+        
         // setup the list adapter
         nameListAdapter = new NameListAdapter(this, Family.getNames(),
                 Family.getRecipients());
@@ -98,8 +127,9 @@ public class Main extends ListActivity {
         });
         editText.setVisibility(View.VISIBLE);
         
-        // Hide the bottom two rows of buttons when the softkeyboard is visible
-        // so the name list doesn't shrink to nothing
+        // Hide the bottom two rows of buttons and the banner ad when the
+        // softkeyboard is visible so the name list doesn't shrink to nothing on
+        // low resolution screens
         final View activityRootView = findViewById(R.id.activityRoot);
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new OnGlobalLayoutListener() {
@@ -122,33 +152,17 @@ public class Main extends ListActivity {
                             // With a keyboard
                             pairChooseRow.setVisibility(View.GONE);
                             resetHideRow.setVisibility(View.GONE);
+                            Main.this.adView.setVisibility(View.GONE);
                             
                         } else {
                             // Without a keyboard
                             pairChooseRow.setVisibility(View.VISIBLE);
                             resetHideRow.setVisibility(View.VISIBLE);
+                            Main.this.adView.setVisibility(View.VISIBLE);
                             
                         }
                     }
                 });
-        Log.d("test", "checking google play services");
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-            Log.d("test", "we got play services");
-            System.out.println("we got play services");
-        } else {
-            Log.d("test", "uh oh, no play services");
-            System.out.println("uh oh, no play services");
-        }
-        Log.d("test", "done checking google play services");
-        
-        // Initiate a generic request.
-        AdRequest adRequest = new AdRequest.Builder().build();
-        
-        this.adView = (AdView) findViewById(R.id.adView);
-        
-        // Load the adView with the ad request.
-        this.adView.loadAd(adRequest);
-        
     }
     
     @Override
