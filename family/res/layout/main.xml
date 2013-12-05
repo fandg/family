@@ -54,7 +54,6 @@
         android:layout_weight="1"
         android:background="@drawable/holly"
         android:orientation="vertical"
-        android:background="@drawable/holly"
         android:padding="10dp" >
 
         <ListView
