@@ -13,6 +13,7 @@
     <string name="app_cancel">Cancel</string>
     <string name="app_delete">Delete Gifter</string>
     <string name="app_change_name">Change Name</string>
+    <string name="app_yes">Yes</string>
     <string name="add_button">Add</string>
     <string name="reset_button">Reset</string>
     <string name="hide_button">Hide Names</string>
@@ -24,5 +25,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="ad_unit_id">ca-app-pub-5797036756387487/1728241651</string>
+    <string name="playservices">Google Play Services is not currently installed.  Select Yes to download from the Play Store.  Press cancel to exit application.  After Google Play Services has been installed you will need to restart the application</string>
 
 </resources>
