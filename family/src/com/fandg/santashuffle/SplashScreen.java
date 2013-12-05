@@ -21,7 +21,13 @@ public class SplashScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+		if(PlayServiceCheck.checkPlayServicesStatus(this)){
+			Intent intent = new Intent(this, PlayServiceCheck.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intent);
+			finish();
+			return;
+		}
         setContentView(R.layout.splashscreen);
         
         final Thread background = new Thread() {
