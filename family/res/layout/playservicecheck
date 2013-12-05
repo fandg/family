@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+            android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/checkplaystore_blurb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp"
+        android:text="@string/playservices" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/checkplaystore_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="clickCancel"
+            android:text="@string/app_cancel" />
+
+        <Button
+            android:id="@+id/checkplaystore_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|fill_horizontal"
+            android:layout_weight="0.5"
+            android:onClick="clickYes"
+            android:text="@string/app_yes" />
+
+    </LinearLayout>
+
+</LinearLayout>
