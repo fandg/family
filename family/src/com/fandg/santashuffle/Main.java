@@ -484,7 +484,9 @@ public class Main extends ListActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri contactData = data.getData(); // has the uri for picked
                                                   // contact
+                try{
                 String[] display = { ContactsContract.Contacts.DISPLAY_NAME };
+                
                 Cursor c = getContentResolver().query(contactData, display,
                         null, null, null); // creates the contact cursor with
                                            // the
@@ -502,6 +504,9 @@ public class Main extends ListActivity {
                                 .size());
                         
                     }
+                }
+                }catch(Exception ex){
+                	Log.e(this.getClass().getSimpleName(), "Issue with contacts" + ex.getMessage());
                 }
             }
             break;
