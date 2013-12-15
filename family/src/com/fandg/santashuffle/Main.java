@@ -180,8 +180,13 @@ public class Main extends ListActivity {
         Collections.shuffle(shuffledList);
         if (Family.isPaired()) {
             Family.setPaired(false);
+            TextView recipientHeader = (TextView) findViewById(R.id.recipient_header);
+            recipientHeader.setText(R.string.chosen_header);
         } else {
             Family.setPaired(true);
+            TextView recipientHeader = (TextView) findViewById(R.id.recipient_header);
+            recipientHeader.setText(R.string.recipient_header);
+            
         }
         for (int i = 0; i < shuffledList.size() - 1; i++) {
             // recipient for giver at position 'i' is giver at position 'i+1' in
@@ -239,7 +244,7 @@ public class Main extends ListActivity {
             
             Toast toast = Toast.makeText(this, "No Names left to choose",
                     duration * 2);
-            toast.setGravity(Gravity.TOP, 0, 50);
+            toast.setGravity(Gravity.BOTTOM, 0, 50);
             toast.show();
             
             return;
@@ -250,10 +255,10 @@ public class Main extends ListActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
         LayoutInflater inflater = getLayoutInflater();
-        View choseView = inflater.inflate(R.layout.choosen_dialog, null);
+        View choseView = inflater.inflate(R.layout.chosen_dialog, null);
         
         TextView choseTextView = (TextView) choseView
-                .findViewById(R.id.chose_value);
+                .findViewById(R.id.choose_value);
         choseTextView.setText(chosenName);
         
         builder.setTitle("Chosen Name From List ");
@@ -309,6 +314,9 @@ public class Main extends ListActivity {
     
     private void processChoose(int index) {
         Family.getChosenIndicies().add(index);
+        Family.setChosen(true);
+        TextView recipientHeader = (TextView) findViewById(R.id.recipient_header);
+        recipientHeader.setText(R.string.chosen_header);
     }
     
     public void onClickReset(View view) {
@@ -323,6 +331,29 @@ public class Main extends ListActivity {
             Family.setHideGifters(true);
         }
         nameListAdapter.notifyDataSetChanged();
+    }
+    
+    public void onClickClear(View view) {
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+        builder.setMessage(R.string.clear_confirm_title)
+                .setPositiveButton(R.string.app_ok,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Family.getNames().clear();
+                                Main.this.clearRecipients();
+                                nameListAdapter.notifyDataSetChanged();
+                            }
+                        })
+                .setNegativeButton(R.string.app_cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+        builder.create();
+        builder.show();
+        
     }
     
     private void startEditDialog(View view2) {
@@ -482,31 +513,30 @@ public class Main extends ListActivity {
         switch (reqCode) {
         case (PICK_CONTACT):
             if (resultCode == Activity.RESULT_OK) {
-                Uri contactData = data.getData(); // has the uri for picked
-                                                  // contact
-                try{
-                String[] display = { ContactsContract.Contacts.DISPLAY_NAME };
-                
-                Cursor c = getContentResolver().query(contactData, display,
-                        null, null, null); // creates the contact cursor with
-                                           // the
-                                           // returned uri
-                if (c.moveToFirst()) {
-                    String name = c
-                            .getString(c
-                                    .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    if (this.isNameValid(name) == true) {
-                        Family.getNames().add(name);
-                        Family.getRecipients().add("none");
-                        nameListAdapter.notifyDataSetChanged();
-                        Family.setCurrentSelection(Family.getNames().size());
-                        nameListView.smoothScrollToPosition(Family.getNames()
-                                .size());
-                        
+                // has the uri for picked contact
+                Uri contactData = data.getData();
+                try {
+                    String[] display = { ContactsContract.Contacts.DISPLAY_NAME };
+                    // creates the contact cursor with the returned uri
+                    Cursor c = getContentResolver().query(contactData, display,
+                            null, null, null);
+                    if (c.moveToFirst()) {
+                        String name = c
+                                .getString(c
+                                        .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        if (this.isNameValid(name) == true) {
+                            Family.getNames().add(name);
+                            Family.getRecipients().add("none");
+                            nameListAdapter.notifyDataSetChanged();
+                            Family.setCurrentSelection(Family.getNames().size());
+                            nameListView.smoothScrollToPosition(Family
+                                    .getNames().size());
+                            
+                        }
                     }
-                }
-                }catch(Exception ex){
-                	Log.e(this.getClass().getSimpleName(), "Issue with contacts" + ex.getMessage());
+                } catch (Exception ex) {
+                    Log.e(this.getClass().getSimpleName(),
+                            "Issue with contacts" + ex.getMessage());
                 }
             }
             break;

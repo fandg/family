@@ -34,50 +34,41 @@ public class NameListAdapter extends ArrayAdapter<String> {
         TextView nameView = (TextView) rowView.findViewById(R.id.name);
         TextView recipientView = (TextView) rowView
                 .findViewById(R.id.recipient);
+        int textColor = Color.BLACK;
+        if ((Family.getChosenIndicies().contains(position) == true)
+                && (Family.isChosen() == true)) {
+            textColor = Color.RED;
+        }
         
         if (Family.isHideGifters()) {
             try {
-                // Random randomGenerator = new Random();
                 String name = giverList.get(position);
-                
-                // int randomInt = randomGenerator.nextInt(name.length() - 1);
-                // char letter = name.charAt(randomInt);
                 
                 String newString = "";
                 for (int i = 0; i < name.length(); i++) {
-                    // if(i == randomInt){
-                    // newString += letter;
-                    // }
-                    // else{
                     newString += "-";
-                    // }
                 }
-                if(Family.getChosenIndicies().contains(position)){
-                	nameView.setText(newString + " (CHOSEN)");
-                	nameView.setTextColor(Color.RED);
-                }
-                else{
-                	 nameView.setText(newString);
-                }
-            
+                
+                nameView.setText(newString);
+                nameView.setTextColor(textColor);
+                
             } catch (IllegalArgumentException ex) {
                 Log.d(this.getClass().getSimpleName(), ex.getMessage());
-                
             }
         } else {
-            if(Family.getChosenIndicies().contains(position)){
-            	nameView.setText(giverList.get(position) + " (CHOSEN)");
-            	nameView.setTextColor(Color.RED);
-            }
-            else{
-            	nameView.setText(giverList.get(position));
-            }
-
+            nameView.setText(giverList.get(position));
+            nameView.setTextColor(textColor);
         }
         
         if (Family.isPaired()) {
-            
             recipientView.setText(recipientList.get(position));
+        } else {
+            if (Family.getChosenIndicies().contains(position)) {
+                recipientView.setText(R.string.name_is_chosen);
+            } else {
+                recipientView.setText("");
+            }
+            recipientView.setTextColor(textColor);
         }
         
         return rowView;
